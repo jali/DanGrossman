@@ -12,9 +12,15 @@
        [(null? (cdr xs)) (car xs)] ; only one element
         [else
          (let ([as (max-of-list (cdr xs))])
+;           (display "\nas:")
+;           (display as)
+;           (display "\n")
                 (if (> as (car xs))
                     as
                     (car xs)))]))
+
+;(max-of-list '(154 2342 32 43 52 234 1))
+(max-of-list '(2 4 5 1))
 
 ;; let example by charlie hicks
 (define (my-fun a)
