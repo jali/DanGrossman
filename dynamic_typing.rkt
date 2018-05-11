@@ -3,6 +3,7 @@
 ; dynamic typing: can use values of any type anywhere
 (define xs '(4 5 6))
 (define ys (list '(4 5) 6 7 '(8) 9 2 3 (list 0 1)))
+(define zs '(1 '(3 4 5) "hi" 2 4 #t))
 
 ; append two lists
 (define (appnd lst1 lst2)
@@ -25,4 +26,7 @@
           (+ (car xs) (sum2 (cdr xs)))
           (if (list? (car xs))
               (+ (sum2 (car xs)) (sum2 (cdr xs)))
-              (sum2 (cdr xs)))))) ;; otherwise the first element might be a string, so I don't want to add it and prevent failure
+              (sum2 (cdr xs))))))
+; otherwise the first element might be a string,
+; so I don't want to add it and prevent failure
+; (sum2 zs) ==> 19
