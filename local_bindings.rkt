@@ -9,11 +9,20 @@
 (define (max-of-list xs)
   ; assume all numbers
   (cond [(null? xs) (error "max-of-list given empty list")] ; built in error handling - program will stop here if the list is empty
-        [(null? (cdr xs)) (car xs)] ; only one element
-        [else (let ([as (max-of-list (cdr xs))])
+       [(null? (cdr xs)) (car xs)] ; only one element
+        [else
+         (let ([as (max-of-list (cdr xs))])
                 (if (> as (car xs))
                     as
                     (car xs)))]))
+
+;; let example by charlie hicks
+(define (my-fun a)
+  (let ([x (car a)]
+        [y (second a)])
+    (/ (* x x) (* y y))))
+
+
 
 ; let -> the expressions are all evaluated in the environment from before the let-expression
 (define (let-double x)
@@ -50,3 +59,25 @@
       ([even? (λ(x) (if (zero? x) #t (odd? (- x 1))))]
        [odd? (λ(x) (if (zero? x) #f (even? (- x 1))))])
     (if (even? x) 0 1)))
+
+
+; prints 0-10
+(let loop ([i 0])
+   (display i)
+   (if (< i 10)
+       (loop (+ i 1)) ; recursive call i+1
+       (display "\n"))) ; else
+
+
+; foldl f acc data
+(foldl + 0 '(1 2 3 4)) 
+; prints 10
+
+(andmap positive? '(4 5 21 -1))
+; #f
+(ormap positive? '(4 5 32 -1))
+; #t
+
+(cdddr '(1 2 3 4 5 6 7 8 9 10))
+
+(caddr '(1 2 3 4 5 6 7 8 9 10))
