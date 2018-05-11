@@ -87,3 +87,8 @@
 (cdddr '(1 2 3 4 5 6 7 8 9 10))
 
 (caddr '(1 2 3 4 5 6 7 8 9 10))
+
+(define (ff xx) (+ xx (* xx bb))) ; forward reference okay here
+(define bb 3)
+(define cc (+ bb 4)) ; backward reference okay
+(ff 17) 
