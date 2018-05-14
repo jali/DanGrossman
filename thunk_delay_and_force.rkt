@@ -35,7 +35,7 @@
 ; - thunks and mutable pairs are enough
 
 ;DELAY & FORCE
-; An ADT represented by a mutable pair
+; An ADT (Abstract Data Type) represented by a mutable pair
 ; - #f in car means cdr is unevaluated thunk
 ;   > Really a one-of type: thunk or result-of-thunk
 ; - Ideally hide representation in a module
@@ -54,6 +54,7 @@
              (set-mcdr! promise ((mcdr promise)))
              (mcdr promise))))
 ; in the false branch, we do the following
+
 ; 1- we change the car of the promise to be true
 ; 2- then we're going to change the cdr of the promise that it doesn't hold what it use to hold -
 ;    instead it holds the result of calling the thunk
@@ -64,5 +65,19 @@
 ; if anyone calls my-force again, mcar will be true, therefore we won't evaluate the thunk, because we don't have to
 ; we just return the mcdr
 
-
+; use with the example above
+; (my-mult 0 (let ([p (my-delay (lambda () (slow-add 3 4)))])
+;                (lambda () (my-force p))))
+; ---
+; (my-mult 1 (let ([p (my-delay (lambda () (slow-add 3 4)))])
+;                (lambda () (my-force p))))
+; (my-mult 1000 (let ([p (my-delay (lambda () (slow-add 3 4)))])
+;                (lambda () (my-force p))))
+; ---
+; 1 or 1000 times takes the same amount of time as the promise will deliver the result later on 999 consecutive times
+; -----------
+; conclusion |
+; -----------
+; that concludes using mutation and thunking to get this idea of lazy evaluation which can be the best of both world
+; in terms of delaying computations you might not need but making sure you do not do them more than once
       
