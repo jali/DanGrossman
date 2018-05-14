@@ -34,3 +34,35 @@
 ; racket predefines support for promises, but we can make our own
 ; - thunks and mutable pairs are enough
 
+;DELAY & FORCE
+; An ADT represented by a mutable pair
+; - #f in car means cdr is unevaluated thunk
+;   > Really a one-of type: thunk or result-of-thunk
+; - Ideally hide representation in a module
+(define (my-delay th) ; call thunk that is not being evaluated yet
+  (mcons #f th))      ; and then let's return mutable pair of false and a thunk
+; so we never called the thunk [ there's no parenthesis around th ]
+; so that's going to be happen very fast
+; we haven't done any expensive computation yet
+; then when you want to use thunk
+; we call my force on the thing above and we get a promise
+
+(define (my-force promise)
+  (if (mcar promise)
+      (mcdr promise)
+      (begin (set-mcar! promise #t)
+             (set-mcdr! promise ((mcdr promise)))
+             (mcdr promise))))
+; in the false branch, we do the following
+; 1- we change the car of the promise to be true
+; 2- then we're going to change the cdr of the promise that it doesn't hold what it use to hold -
+;    instead it holds the result of calling the thunk
+;    (( the first one gets out of the thunk, the next paren calling the thunk ))
+;    we take that result and put it in the cdr. we don't save it anywhere else
+; 3- we look up (mcdr p) have the result of calling the thunk and we return it
+;
+; if anyone calls my-force again, mcar will be true, therefore we won't evaluate the thunk, because we don't have to
+; we just return the mcdr
+
+
+      
